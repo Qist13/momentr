@@ -120,8 +120,12 @@ class ReplayBuffer:
         self._paused = False
         self._lock = threading.Lock()
         self._thread: threading.Thread | None = None
-        # Whole segments needed to cover the clip, plus the one being written.
-        self.keep_segments = math.ceil(cfg.clip_seconds / SEGMENT_SECONDS) + 2
+
+    @property
+    def keep_segments(self) -> int:
+        # Whole segments needed to cover the clip, plus the one being written. Read from
+        # cfg each time so settings that don't affect capture can be swapped in live.
+        return math.ceil(self.cfg.clip_seconds / SEGMENT_SECONDS) + 2
 
     # lifecycle
 

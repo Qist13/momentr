@@ -23,7 +23,15 @@ def main() -> int:
     run = sub.add_parser("run", help="start the replay buffer (default)")
     run.add_argument("--no-tray", action="store_true", help="run without a tray icon")
     sub.add_parser("save", help="tell a running momentr to save a clip")
+    auto = sub.add_parser("autostart", help="start momentr when you log in")
+    auto.add_argument("state", choices=["on", "off"])
     args = parser.parse_args()
+
+    if args.command == "autostart":
+        from . import autostart
+        autostart.set_enabled(args.state == "on")
+        print(f"momentr: start at login {'enabled' if args.state == 'on' else 'disabled'}")
+        return 0
 
     if args.command == "save":
         from .app import send_save_signal

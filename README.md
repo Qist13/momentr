@@ -29,12 +29,13 @@ python3 -m venv --system-site-packages .venv   # system site-packages gives pyst
 .venv/bin/momentr              # start with a tray icon
 .venv/bin/momentr run --no-tray
 .venv/bin/momentr save         # save a clip from a running instance (e.g. bind to a GNOME shortcut)
+.venv/bin/momentr autostart on # start at login (or use "Start at login" in the tray menu)
 ```
 
 Default hotkey: **Ctrl+Alt+S**. Clips are saved to `~/Videos/Momentr`.
 
-The tray menu can save a clip, pause or resume the buffer, open the clips folder and
-open the settings file.
+The tray menu can save a clip, pause or resume the buffer, set the clip length, set how many clips to keep, toggle
+start at login, open the settings file and open the clips folder.
 
 ## Configuration
 
@@ -52,8 +53,17 @@ open the settings file.
 | `bitrate`      | `"12M"`            | target video bitrate                                               |
 | `audio`        | `true`             | record desktop audio                                               |
 | `sound`        | `true`             | play a shutter sound when a clip is saved                          |
+| `keep_clips`   | `0`                | keep only the newest N clips (0 = keep all)                        |
+| `keep_days`    | `0`                | delete clips older than N days (0 = never)                         |
 
-Restart Momentr after changing settings.
+Changes apply as soon as you save the file. Capture settings (`fps`, `monitor`,
+`draw_mouse`, `encoder`, `bitrate`, `audio`) restart capture, which clears the buffer;
+everything else applies without interruption. If the file has an error, Momentr keeps
+the previous settings and shows a notification.
+
+Cleanup only deletes clips with Momentr's own names (`clip_YYYY-MM-DD_HH-MM-SS.mp4`),
+and deletion is permanent. Rename a clip to keep it forever. Cleanup runs at startup,
+after each save and whenever settings change.
 
 ## Limitations
 
