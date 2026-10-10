@@ -53,6 +53,7 @@ start at login, open the settings file and open the clips folder.
 | `bitrate`      | `"12M"`            | target video bitrate                                               |
 | `audio`        | `true`             | record desktop audio                                               |
 | `sound`        | `true`             | play a shutter sound when a clip is saved                          |
+| `overlay`      | `true`             | show a "Clipped with Momentr" pop-up at the top-left on save        |
 | `keep_clips`   | `0`                | keep only the newest N clips (0 = keep all)                        |
 | `keep_days`    | `0`                | delete clips older than N days (0 = never)                         |
 

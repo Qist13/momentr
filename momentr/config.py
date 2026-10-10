@@ -38,6 +38,10 @@ audio = true
 # Play a shutter sound when a clip is saved.
 sound = true
 
+# Show a "Clipped with Momentr" pop-up near the top-left of the screen when a clip is
+# saved (instead of a desktop notification).
+overlay = true
+
 # Automatic cleanup of old clips (0 = off). Only auto-named clips
 # (clip_YYYY-MM-DD_HH-MM-SS.mp4) are deleted; rename a clip to keep it forever.
 keep_clips = 0
@@ -57,6 +61,7 @@ class Config:
     bitrate: str = "12M"
     audio: bool = True
     sound: bool = True
+    overlay: bool = True
     keep_clips: int = 0
     keep_days: int = 0
 

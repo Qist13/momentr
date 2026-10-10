@@ -10,7 +10,8 @@ from pathlib import Path
 from . import autostart
 from .cleanup import prune_clips
 from .config import CAPTURE_KEYS, CONFIG_PATH, RUNTIME_DIR, Config, load_config, set_config_value
-from .recorder import ReplayBuffer, log
+from .overlay import show_toast
+from .recorder import ReplayBuffer, capture_geometry, log
 
 PID_FILE = RUNTIME_DIR / "momentr.pid"
 SHUTTER_SOUND = Path("/usr/share/sounds/freedesktop/stereo/camera-shutter.oga")
@@ -72,7 +73,10 @@ class App:
                 path = self.buffer.save_clip()
                 if self.cfg.sound:
                     play_shutter()
-                notify("Clip saved", str(path))
+                if self.cfg.overlay:
+                    self.show_saved_toast(path)
+                else:
+                    notify("Clip saved", str(path))
                 self.cleanup()
             except Exception as e:
                 notify("Couldn't save clip", str(e), icon="dialog-error")
@@ -80,6 +84,14 @@ class App:
                 self._saving.release()
 
         threading.Thread(target=work, daemon=True).start()
+
+    def show_saved_toast(self, path: Path) -> None:
+        try:
+            _, _, x, y = capture_geometry(self.cfg.monitor)
+        except Exception:
+            x, y = 0, 0
+        show_toast(x, y, "Clipped with Momentr", f"Last {self.cfg.clip_seconds}s · {path.name}")
+        log(f"Clip saved {path}")
 
     def toggle_pause(self) -> None:
         self.buffer.set_paused(not self.buffer.paused)
